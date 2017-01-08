@@ -1,3 +1,31 @@
-<h1>
-  {{title}}
-</h1>
+<vg-player>
+  <vg-scrub-bar style="bottom: 0;">
+    <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
+    <vg-scrub-bar-buffering-time></vg-scrub-bar-buffering-time>
+  </vg-scrub-bar>
+
+  <a-scene vr-mode-ui="enabled: true" embedded>
+    <a-assets>
+      <video [src]="currentRoom.url" vgMedia id="video" preload="auto" crossorigin="anonymous" loop autoplay muted></video>
+      <img id="ringImg" src="assets/ring1.png" width="512" height="512">
+    </a-assets>
+
+    <a-image
+      *ngFor="let door of currentRoom.doors; let i=index"
+      [attr.depth]="100 + i"
+      [attr.position]="door.position"
+      [attr.rotation]="door.rotation"
+      src="#ringImg"
+      scale="1 1 1"
+      (mouseenter)="onMouseEnter($event, door)"
+      (mouseleave)="onMouseLeave($event)"
+      animation__scale="startEvents: vgStartAnimation; pauseEvents: vgPauseAnimation; property: scale; dur: 2000; from: 1 1 1; to: 2 2 2">
+    </a-image>
+
+    <a-videosphere src="#video"></a-videosphere>
+
+    <a-camera>
+      <a-cursor color="#FFFFFF"></a-cursor>
+    </a-camera>
+  </a-scene>
+</vg-player>
